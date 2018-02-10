@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\Cookie;
 
 final class SwaggerUiController
 {
@@ -55,10 +56,14 @@ final class SwaggerUiController
             $spec['basePath'] = $request->getBaseUrl();
         }
 
-        return new Response(
+        $response = new Response(
             $this->twig->render('@NelmioApiDoc/SwaggerUi/index.html.twig', ['swagger_data' => ['spec' => $spec]]),
             Response::HTTP_OK,
             ['Content-Type' => 'text/html']
         );
+        $response->headers->setCookie(new Cookie('xat', '123'));
+        $response->headers->setCookie(new Cookie('xrt', '123'));
+
+        return $response;
     }
 }
